@@ -1,3 +1,3 @@
 # hangman-game
 
-<a href="demo">demo</a>
+<a href="https://followhappyq.github.io/hangman-game/">demo</a>
