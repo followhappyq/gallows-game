@@ -1,0 +1,43 @@
+* {
+  margin: 0;
+}
+#d1 {
+  /*eslint-disable-next-line*/
+  font: 700 1px Press Start 2p;
+  position: absolute;
+  color: #fff;
+}
+body {
+  background-color: #222222;
+  background: repeating-linear-gradient(
+      45deg,
+      #2b2b2b 0%,
+      #2b2b2b 10%,
+      #222222 0%,
+      #222222 50%
+    )
+    0 / 15px 15px;
+}
+header {
+  display: flex;
+  margin: 30px auto;
+  height: 50px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+main {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+main canvas {
+  border-radius: 4px;
+}
+footer {
+  font-family: "PressStart";
+  font-size: 12px;
+  position: absolute;
+  right: 200px;
+  bottom: 50px;
+  color: white;
+}
