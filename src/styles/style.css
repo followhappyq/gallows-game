@@ -26,13 +26,19 @@ header {
   justify-content: center;
 }
 main {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
+  display: block;
 }
 main canvas {
+  display: block;
+  margin: auto;
   border-radius: 4px;
 }
+
+main input {
+  display: block;
+  margin: auto;
+}
+
 footer {
   font-family: "PressStart";
   font-size: 12px;
