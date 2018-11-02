@@ -3,7 +3,8 @@ const game = {
     height: 600,
     ctx: undefined,
     cell: [],
-    words: ['software','javascript','python','github','react','angular','ecmascript'],
+    words: ['software','javascript','python','github','react','angular','ecmascript', 'documentation',
+            'mongodb','bootstrap','semantic','junior','senior','developer','webdeveloper','linux'],
     running: true,
     gameStarted: false,
     sprites: {
@@ -26,6 +27,7 @@ const game = {
     alphabet: [],
     letter: undefined,
     getLetter: undefined,
+    menu: 'PRESS START',
     init: function() {
         const canvas = document.getElementById('wisielec');
         this.ctx = canvas.getContext("2d");
@@ -103,7 +105,7 @@ const game = {
 
 
         if (!this.gameStarted) {
-            this.ctx.fillText("PRESS SPACE", 320, 400);
+            this.ctx.fillText(this.menu, 320, 400);
         } else {
             this.ctx.fillText(`SELECTED LETTER: ${this.letter}`, 320 , 400);
         }
@@ -128,7 +130,6 @@ const game = {
         }
 
     }
-
 }
 
 game.logick = {
@@ -163,6 +164,7 @@ game.logick = {
         }
     },
     gameOver: function(){
+        game.menu = "Game Over \n Press F5";
         game.gameStarted = false;
     }
 
