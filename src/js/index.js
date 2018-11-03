@@ -27,7 +27,7 @@ const game = {
     alphabet: [],
     letter: undefined,
     getLetter: undefined,
-    menu: 'PRESS START',
+    menu: 'PRESS SPACE',
     init: function() {
         const canvas = document.getElementById('wisielec');
         this.ctx = canvas.getContext("2d");
@@ -35,19 +35,24 @@ const game = {
         this.ctx.fillStyle = "#fff";
 
         window.addEventListener('keydown', e => {
-            if(e.keyCode == 32) {
+            if(e.keyCode === 32) {
                 this.gameStarted = true;
                 this.letter = 'CHOOSE LETTER';
+                this.run();            
             }
             
-            if(e.keyCode == 13){
+            if(e.keyCode === 13){
                 this.letter = this.getLetter.value.toUpperCase();
                 this.getLetter.value = '';
+                this.run();
             }
+
         });
 
         this.getLetter = document.getElementById('letter');
-        this.getLetter.addEventListener('keyup', function(e){ return e.target.value});
+        this.getLetter.addEventListener('keyup', e => e.target.value);
+
+                
     },
     load: function() {
         for(let key in this.sprites) {
@@ -55,6 +60,26 @@ const game = {
             this.sprites[key].src = `./src/sprites/${key}.png`;      
                         
         }
+        /*     API    
+        const url =
+                "https://newsapi.org/v2/top-headlines?" +
+                "country=us&" +
+                "apiKey=289e10225cda4d8db43998d869c78a27";
+                const req = new Request(url);
+                fetch(req).then(response => response.json().then(
+                    data => ({data: data,
+                             status: response.status})
+                )).then(res => {
+                    let news = res.data.articles.filter(news => {
+                        return news.description != null;
+                    }).map(news => news.description);
+
+                    news = news[Math.floor(Math.random() * news.length - 1)].split(' ');
+                    news = news.filter(elem => elem.length > 5);
+                    this.words = news;
+                    console.log(this.words);
+                })
+                */
     },
     create: function() {
         this.word = this.words[Math.floor(Math.random() * this.words.length)].toUpperCase();
@@ -88,7 +113,7 @@ const game = {
             }
             if(this.mistakes === 6){
                 game.logick.gameOver();
-
+                this.running = false;
             }
 
         }
@@ -99,8 +124,8 @@ const game = {
         this.ctx.drawImage(this.sprites.background, 0, 0);
 
         for(let i = 0; i < this.word.length; i++) {
-            this.ctx.drawImage(this.sprites.cell,(this.sprites.cell.x + 45) + 46*i,500);
-            this.ctx.fillText(this.stars[i], (this.sprites.cell.x + 60) + 46*i, 528); 
+            this.ctx.drawImage(this.sprites.cell,(this.sprites.cell.x + 45) + 46 * i, 500);
+            this.ctx.fillText(this.stars[i], (this.sprites.cell.x + 60) + 46 * i, 528); 
         }
 
 
@@ -122,13 +147,9 @@ const game = {
     run: function() {
         this.update();
         this.render();
-
         if(this.running) {
-            window.requestAnimationFrame(() => {
-                game.run();
-            })
+            setInterval(() => this.run(),500);
         }
-
     }
 }
 
