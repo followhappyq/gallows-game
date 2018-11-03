@@ -60,7 +60,7 @@ const game = {
             this.sprites[key].src = `./src/sprites/${key}.png`;      
                         
         }
-        /*     API    
+       //API  
         const url =
                 "https://newsapi.org/v2/top-headlines?" +
                 "country=us&" +
@@ -77,12 +77,15 @@ const game = {
                     news = news[Math.floor(Math.random() * news.length - 1)].split(' ');
                     news = news.filter(elem => elem.length > 5);
                     this.words = news;
-                    console.log(this.words);
-                })
-                */
+                });
+                
     },
     create: function() {
         this.word = this.words[Math.floor(Math.random() * this.words.length)].toUpperCase();
+        this.word = this.word.split('').filter(elem => {
+            return elem.charCodeAt() >= 60 && elem.charCodeAt() <= 90;
+        }).join('');
+        console.log(this.word);
         for(key in this.word){
             this.stars.push('*');
         }
@@ -101,8 +104,10 @@ const game = {
     start: function() {
         this.init();
         this.load();
-        this.create();
-        this.run();
+        setTimeout(function(){
+            game.create();
+            game.run();
+        },1000);
         console.log('game start');
     },
     update: function() {
@@ -147,9 +152,6 @@ const game = {
     run: function() {
         this.update();
         this.render();
-        if(this.running) {
-            setInterval(() => this.run(),500);
-        }
     }
 }
 
