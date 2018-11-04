@@ -73,7 +73,7 @@ const game = {
                     let news = res.data.articles.filter(news => {
                         return news.description != null;
                     }).map(news => news.description);
-
+                    console.log(news);
                     news = news[Math.floor(Math.random() * news.length - 1)].split(' ');
                     news = news.filter(elem => elem.length > 5);
                     this.words = news;
@@ -135,7 +135,7 @@ const game = {
 
 
         if (!this.gameStarted) {
-            this.ctx.fillText(this.menu, 320, 400);
+            this.ctx.fillText(this.menu, 300, 400);
         } else {
             this.ctx.fillText(`SELECTED LETTER: ${this.letter}`, 320 , 400);
         }
@@ -187,7 +187,7 @@ game.logick = {
         }
     },
     gameOver: function(){
-        game.menu = "Game Over \n Press F5";
+        game.menu = `Game Over \n Press word: ${game.word}`;
         game.gameStarted = false;
     }
 
