@@ -135,6 +135,10 @@ const game = {
                 this.running = false;
             }
         }
+        if(this.stars.indexOf('*') === -1){
+            this.menu = '\t \t \t \t You win!Press F5'
+            this.gameStarted = false;
+        }
     },
     render: function() {
         this.ctx.clearRect(0, 0, this.width, this.height);
