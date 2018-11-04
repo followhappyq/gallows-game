@@ -77,7 +77,7 @@ const game = {
                     news = news[Math.floor(Math.random() * news.length - 1)].split(' ');
                     news = news.filter(elem => elem.length > 5);
                     this.words = news;
-                });
+                }).catch(console.log('error'));
                 
     },
     create: function() {
@@ -187,7 +187,7 @@ game.logick = {
         }
     },
     gameOver: function(){
-        game.menu = `Game Over \n Press word: ${game.word}`;
+        game.menu = `Game Over(Press F5) word: ${game.word}`;
         game.gameStarted = false;
     }
 
