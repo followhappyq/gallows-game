@@ -39,9 +39,41 @@ main input {
   margin: auto;
 }
 
+main div.alphabet {
+  display: block;
+  margin: auto;
+}
+
+ul {
+  list-style: none;
+  text-align: center;
+}
+
+ul li {
+  display: inline-block;
+  padding: 5px;
+  border: 1px solid white;
+  margin: 3px;
+  color: #ffc;
+  transition: .3s;
+}
+
+.item:hover {
+  transition: .3s;
+  border: 3px solid white;
+  font-size: 20px;
+  color: #fcc;
+}
+
+.deactivate {
+  transition: 1s;
+  opacity: 0.2;
+}
+
+
 
 footer {
-  font-family: "PressStart"
+  font-family: "PressStart";
   font-size: 12px;
   position: absolute;
   right: 200px;

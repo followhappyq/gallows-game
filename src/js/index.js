@@ -18,17 +18,17 @@ const game = {
         hangman5: undefined,
         hangman6: undefined      
     },
-    sound: {
-
-    },
     word: undefined,
     stars: [],
     mistakes: 0,
     alphabet: [],
     letter: undefined,
     getLetter: undefined,
-    menu: 'PRESS SPACE',
+    menu: '\t \t \t \t PRESS SPACE',
+    list: undefined,
+    listener: [],
     init: function() {
+
         const canvas = document.getElementById('wisielec');
         this.ctx = canvas.getContext("2d");
         this.ctx.font = "15px PressStart";
@@ -40,19 +40,10 @@ const game = {
                 this.letter = 'CHOOSE LETTER';
                 this.run();            
             }
-            
-            if(e.keyCode === 13){
-                this.letter = this.getLetter.value.toUpperCase();
-                this.getLetter.value = '';
-                this.run();
-            }
-
         });
 
-        this.getLetter = document.getElementById('letter');
-        this.getLetter.addEventListener('keyup', e => e.target.value);
-
-                
+        this.list = document.getElementById('alphabet');
+        
     },
     load: function() {
         for(let key in this.sprites) {
@@ -65,30 +56,29 @@ const game = {
                 "https://newsapi.org/v2/top-headlines?" +
                 "country=us&" +
                 "apiKey=289e10225cda4d8db43998d869c78a27";
-                const req = new Request(url);
-                fetch(req).then(response => response.json().then(
-                    data => ({data: data,
+
+        const req = new Request(url);
+            fetch(req).then(response => response.json().then(
+                data => ({data: data,
                              status: response.status})
-                )).then(res => {
-                    let news = res.data.articles.filter(news => {
-                        return news.description != null;
-                    }).map(news => news.description);
-                    console.log(news);
-                    news = news[Math.floor(Math.random() * news.length - 1)].split(' ');
-                    news = news.filter(elem => elem.length > 5);
-                    this.words = news;
-                }).catch(console.log('error'));
-                
+            )).then(res => {
+                let news = res.data.articles.filter(news => {
+                    return news.description != null;
+                }).map(news => news.description);
+                news = news[Math.floor(Math.random() * news.length)].split(' ');
+                news = news.filter(elem => elem.length > 5);
+                this.words = news;
+            }).catch(console.log(''));              
     },
     create: function() {
         this.word = this.words[Math.floor(Math.random() * this.words.length)].toUpperCase();
         this.word = this.word.split('').filter(elem => {
             return elem.charCodeAt() >= 60 && elem.charCodeAt() <= 90;
         }).join('');
+
         console.log(this.word);
-        for(key in this.word){
-            this.stars.push('*');
-        }
+
+        //Add sprites on canvas
         for (let row = 0; row < this.word.length; row++) {
             this.cell.push({
                 x: 46 * row + 46,
@@ -97,15 +87,38 @@ const game = {
                 isGuess: false
             });            
         }
+
+        //Add * in cell
+        for(key in this.word){
+            this.stars.push('*');
+        }
+
+        //Add alphabet on canvas
         for (let letter = 0; letter < 26; letter++) {
             this.alphabet.push(String.fromCharCode(65+letter));
         }
+        
+        //Add alphabet on page
+        for(key  in this.alphabet){
+            this.list.innerHTML += `<li class="item">${this.alphabet[key]}</li>`
+        }
+
+        this.listener = document.getElementsByClassName("item");
+    },
+    eventListener: function(){
+        for(let i = 0; i < 26; i++){
+            this.listener[i].addEventListener('click',(e) => {
+                this.letter = e.target.innerHTML;
+            })
+        }
+
     },
     start: function() {
         this.init();
         this.load();
         setTimeout(function(){
             game.create();
+            game.eventListener();
             game.run();
         },1000);
         console.log('game start');
@@ -114,13 +127,13 @@ const game = {
         if(this.gameStarted) {
             if(game.logick.checkLetters()) {
                 game.logick.deleteLetterFromAlphabet(this.letter);
-                game.logick.checkWord(this.letter)
+                game.logick.checkWord(this.letter);
+                game.logick.deactivateLetter(this.letter);
             }
             if(this.mistakes === 6){
                 game.logick.gameOver();
                 this.running = false;
             }
-
         }
     },
     render: function() {
@@ -133,25 +146,28 @@ const game = {
             this.ctx.fillText(this.stars[i], (this.sprites.cell.x + 60) + 46 * i, 528); 
         }
 
-
         if (!this.gameStarted) {
-            this.ctx.fillText(this.menu, 300, 400);
+            this.ctx.fillText(this.menu, 200, 400);
         } else {
             this.ctx.fillText(`SELECTED LETTER: ${this.letter}`, 320 , 400);
         }
+        
         this.ctx.drawImage(this.sprites[`hangman${this.mistakes}`], 0, 0);
         
         for(let i = 0; i < this.alphabet.length; i++) {
             this.ctx.fillText(this.alphabet[i],280 + 20 * i, 250);
         }
+
         this.ctx.fillText("Letters haven't yet been selected", 285, 200);
         this.ctx.fillText(`Mistakes: ${this.mistakes}`, 600, 50);
 
        
     },
     run: function() {
-        this.update();
-        this.render();
+        setInterval(() => {
+            this.update();
+            this.render();
+        },500);
     }
 }
 
@@ -178,19 +194,24 @@ game.logick = {
             this.showLetter(postion);
         } else {
             game.mistakes++;
-        }
-        
+        }        
     },
-    showLetter: function(arr){
+    showLetter: function(arr) {
         for(key in arr){
             game.stars[arr[key]] = game.letter;
         }
     },
-    gameOver: function(){
+    gameOver: function() {
         game.menu = `Game Over(Press F5) word: ${game.word}`;
         game.gameStarted = false;
+    },
+    deactivateLetter: function(letter) {
+        for(key in game.listener){
+            if(game.listener[key].innerHTML === game.letter) {
+                game.listener[key].className = "deactivate";
+            }
+        }
     }
-
 }
 
 window.addEventListener("load", () => {
