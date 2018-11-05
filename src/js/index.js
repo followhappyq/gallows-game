@@ -17,6 +17,8 @@ const game = {
         hangman4: undefined,            
         hangman5: undefined,
         hangman6: undefined      
+    },sound: {
+        wrong: document.getElementById('wrong')
     },
     word: undefined,
     stars: [],
@@ -198,6 +200,7 @@ game.logick = {
             this.showLetter(postion);
         } else {
             game.mistakes++;
+            game.sound.wrong.play();
         }        
     },
     showLetter: function(arr) {
