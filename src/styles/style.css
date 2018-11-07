@@ -60,6 +60,7 @@ ul li {
 
 .item:hover {
   transition: .3s;
+  transition-delay: .2s;
   border: 3px solid white;
   font-size: 20px;
   color: #fcc;
